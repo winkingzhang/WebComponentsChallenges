@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Digital Clock - Web Components</title>
+    <template id="clockTemplate">
+        <style>
+            .clock {
+                display: inline-flex;
+                justify-content: space-around;
+                background: white;
+                font-size: 8rem;
+                box-shadow: 2px 2px 4px -1px grey;
+                border: 1px solid green;
+                font-family: Helvetica, sans-serif;
+                width: 100%;
+            }
+            .clock .hour,
+            .clock .minute,
+            .clock .second {
+                color: orange;
+                padding: 1.5rem;
+                text-shadow: 0px 2px black;
+            }
+        </style>
+        <div class="clock">
+            <div class="hour">HH</div>
+            <div class="minute">MM</div>
+            <div class="second">SS</div>
+        </div>
+    </template>
+</head>
+<body>
+<h1>Simple Digital Clock</h1>
+<wc-digital-clock></wc-digital-clock>
+
+<script>
+    class DigitalClock extends HTMLElement {
+        constructor() {
+            super();
+            //TODO: attach shadow DOM here
+            const shadowRoot = this.attachShadow({ mode: 'open' });
+            const fragment = document.getElementById('clockTemplate').content.cloneNode(true);
+            shadowRoot.appendChild(fragment);
+        }
+
+        connectedCallback() {
+            const hourElement = this.shadowRoot.querySelector('.hour'),
+                minuteElement = this.shadowRoot.querySelector('.minute'),
+                secondElement = this.shadowRoot.querySelector('.second');
+            setInterval(() => {
+                const date = new Date();
+                hourElement.innerText = date.getHours();
+                minuteElement.innerText = date.getMinutes();
+                secondElement.innerText = date.getSeconds();
+            }, 1000);
+        }
+    }
+
+    window.customElements.define("wc-digital-clock", DigitalClock);
+</script>
+</body>
+</html>
